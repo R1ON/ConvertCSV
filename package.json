@@ -1,0 +1,11 @@
+{
+  "name": "ConverterCSV",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/R1ON/ConvertCSV"
+  },
+  "dependencies": {
+    "moment": "2.29.1",
+  },
+}
