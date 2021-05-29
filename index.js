@@ -56,8 +56,12 @@ fs.readFile('markers_utf8.csv', 'utf8', (err, data) => {
 			}
 		}
 
+		const markerName = splittedRow[0]
+			? `${splittedRow[0]} ${index}`
+			: `Marker ${index}`;
+
 		acc +=
-			(splittedRow[0] || `Marker ${index}`) + TAB_SYMBOL +
+			markerName + TAB_SYMBOL +
 			startDate + TAB_SYMBOL +
 			splittedRow[4] + TAB_SYMBOL +
 			DEFAULT_TIME_FORMAT + TAB_SYMBOL +
