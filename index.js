@@ -13,7 +13,7 @@ console.log('\n\nPROCESS', process.argv);
 
 const timeFromARGV = process.argv[2];
 const hasTimeStart = !!timeFromARGV;
-const TIME_START = hasTimeStart ? timeFromARGV.split('.').join(';') : null;
+const TIME_START = hasTimeStart ? timeFromARGV.split('.').join(':') : null;
 
 const TAB_SYMBOL = '\t';
 const DEFAULT_TYPE = 'Cue';
@@ -43,12 +43,8 @@ fs.readFile('markers_utf8.csv', 'utf8', (err, data) => {
 		let startDate = splittedRow[2];
 
 		if (TIME_START !== null) {
-			startDate = moment.utc(
-				moment(splittedRow[2],'HH;mm;ss;SS').diff(
-					moment(TIME_START,'HH;mm;ss;SS')
-				)
-			).format('HH:mm:ss:SS');
-
+			startDate = subtractTime(startDate, TIME_START);
+			
 			if (startDate === 'Invalid date') {
 				console.log('ERROR: Invalid date');
 
@@ -97,3 +93,58 @@ fs.readFile('markers_utf8.csv', 'utf8', (err, data) => {
 		});
 	});
 });
+
+// ---
+
+const TIME = 60;
+const MIN_TIME = 0;
+
+function subtractTime(firstDate, secondDate) {
+	const [
+		firstDateHours,
+		firstDateMinutes,
+		firstDateSeconds,
+		firstDateMs,
+	] = firstDate.split(':');
+
+	const [
+		secondDateHours,
+		secondDateMinutes,
+		secondDateSeconds,
+		secondDateMs,
+	] = secondDate.split(':');
+
+	let msRemainder = 0;
+	let ms = firstDateMs - secondDateMs;
+
+	if (ms < MIN_TIME) {
+		msRemainder = 1;
+		ms = TIME - Math.abs(ms);
+	}
+
+	let secondsRemainder = 0;
+	let seconds = firstDateSeconds - secondDateSeconds - msRemainder;
+
+	if (seconds < MIN_TIME) {
+		secondsRemainder = 1;
+		seconds = TIME - Math.abs(seconds);
+	}
+
+	let minutesRemainder = 0;
+	let minutes = firstDateMinutes - secondDateMinutes - secondsRemainder;
+
+	if (minutes < MIN_TIME) {
+		minutesRemainder = 1;
+		minutes = TIME - Math.abs(minutes);
+	}
+
+	let hours = firstDateHours - secondDateHours - minutesRemainder;
+
+	if (hours < MIN_TIME) {
+		hours = TIME - Math.abs(hours);
+	}
+	
+	const time = `${hours}:${minutes}:${seconds}:${ms}`;
+
+	return moment(time, 'HH:mm:ss:SS').format('HH:mm:ss:SS');
+}

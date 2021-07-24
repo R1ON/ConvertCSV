@@ -1,5 +1,5 @@
 # ConvertCSV
-Convert CSV markers from Adobe Premiere Pro 2019 to Adobe Audition 2019.
+Convert CSV markers from Adobe Premiere Pro 2021 to Adobe Audition 2021.
 
 ---
 
@@ -14,6 +14,10 @@ node index.js 00.00.00.00
 
 ![Adobe premiere preview](https://wmpics.pics/di-WIOP.png)
 
+---
+### Don't forget to set the correct FPS
+
+![Adobe premiere preview](https://wmpics.pics/di-XMAD.png)
 ---
 
 As a result, a file with the name `markers_audition.csv` will be created, which can be imported into AdobeAudition
